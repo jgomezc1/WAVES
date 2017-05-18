@@ -5,3 +5,5 @@
 *.vtk
 *.avi
 *~
+Makefile*
+makefile*
