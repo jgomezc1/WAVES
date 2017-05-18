@@ -1,0 +1,7 @@
+*.o
+*.out
+*.dis
+*.dat
+*.vtk
+*.avi
+*~
