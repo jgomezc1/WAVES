@@ -1,4 +1,4 @@
-OBJECTS = Malla9PaperReg.o
+OBJECTS = Malla.o
 FFLAGS= -O3
 FLAGPARALLEL= -fbounds-check
 FC= gfortran
@@ -8,8 +8,8 @@ malla.out: $(OBJECTS)
 	$(FC) $(OBJECTS) $(FFLAGS) -o malla.out
 
 
-Malla9PaperReg.o: Malla9PaperReg.f90	
-	$(FC) -c Malla9PaperReg.f90
+Malla.o: Malla.f90	
+	$(FC) -c Malla.f90
 
 clean:
 	rm -f $(OBJECTS) malla.out
