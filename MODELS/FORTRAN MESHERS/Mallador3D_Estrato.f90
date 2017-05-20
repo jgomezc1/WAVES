@@ -29,6 +29,7 @@ INTEGER NIMP
 REAL*8, ALLOCATABLE, DIMENSION(:):: X, Y, Z
 INTEGER, ALLOCATABLE, DIMENSION(:,:):: MIE
 INTEGER, ALLOCATABLE, DIMENSION(:):: LOADEDVECS
+REAL*8, DIMENSION(8):: CZ
 
 REAL*8 elapsed_time
 INTEGER tclock1, tclock2, clock_rate
@@ -78,9 +79,9 @@ NMEL=NMEL-NEL
 
 CLOSE(10)
 
-X=X/100.0D0
-Y=Y/100.0D0
-Z=Z/100.0D0
+X=X/10.0D0
+Y=Y/10.0D0
+Z=Z/10.0D0
 
 OPEN(10,FILE='Coord.txt')
 
@@ -172,7 +173,7 @@ OPEN(10, FILE='../DAMIAN_meshes/CuboEst.inp')
 
 WRITE(10,'(1A9)') 'Malla 3D'
 
-WRITE(10,'(3I8, 1F10.2, 8I7)') NP, NEL, 1, 1.50D0, 3001, 3, 8, 24, 5, 0, NPL, NIMP
+WRITE(10,'(3I8, 1F10.2, 8I7)') NP, NEL, 2, 1.50D0, 3001, 3, 8, 24, 5, 0, NPL, NIMP
 WRITE(10,'(2I3)') 20, 8
 
 DO I=1, NP
@@ -184,6 +185,7 @@ DO I=1, NP
 END DO
 
 WRITE(10, '(3I4, 5F10.2)') 1, 5, 0, 2.0D0, 1.0D0, 1.0D0, 0.0D0, 0.0D0
+WRITE(10, '(3I4, 5F10.2)') 2, 5, 0, 2.0D0, 1.0D0, 1.0D0, 0.0D0, 0.0D0
 
 
 
@@ -198,11 +200,23 @@ WRITE(10, '(3I4, 5F10.2)') 1, 5, 0, 2.0D0, 1.0D0, 1.0D0, 0.0D0, 0.0D0
 !6: ÁNGULO DE INCIDENCIA DE LA ONDA
 
 
+
 WRITE(10, '(1I1, 1F7.2, 1F11.2, 3F17.2)') 2, 1.50D0, 0.25D0, 5.0D0, 10.00D0, 0.0D0
 
 DO I=1, NEL
 !
-    WRITE(10,'(5I8, 8I8)') I, 6, 24, 1, 8, MIE(:,I)
+	DO J=1, 8
+		CZ(J)=Z(MIE(J,I))
+	END DO
+	if (i==1) then
+		write(*,'(2f12.6)') cz(j), maxval(cz)
+	end if
+	IF (MAXVAL(CZ) .LE. 0.20D0) THEN
+		write(*,*) maxval(cz)
+		WRITE(10,'(5I8, 8I8)') I, 6, 24, 2, 8, MIE(:,I)
+	ELSE
+		WRITE(10,'(5I8, 8I8)') I, 6, 24, 1, 8, MIE(:,I)
+	END IF
 !
 END DO
 

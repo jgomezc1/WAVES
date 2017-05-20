@@ -1,7 +1,7 @@
 // Inputs
-	squareSide    = 6; //m
+	squareSide    = 2; //m
 	meshThickness = 10; //m	squareSide / 10; 
-	gridsize      = 1;	//m 	squareSide / 10;
+	gridsize      = .25;	//m 	squareSide / 10;
 
     // Geometry
 	Point(1) = {-squareSide/2, -squareSide/2, 0, gridsize};//-meshThickness/2, gridsize};
@@ -28,7 +28,7 @@
  
 	surfaceVector[] = Extrude {0, 0, meshThickness} {
 	 Surface{6};
-	 Layers{5};
+	 Layers{50};
 	 Recombine;
 	};
 
