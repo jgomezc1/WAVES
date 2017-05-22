@@ -1,12 +1,12 @@
-//Cuidado que todo lo tengo amplificado por 10.0
-cl1=0.100;		//Dimension elementos en el incoming, NO MODIFICAR
-cl2=0.100;		//Dimension de otros elementos
+//Note: Everything has been scaled by a factor of 10.0
+cl1=0.100;		//Characteristic dimension of the incoming elements. DO NOT MODIFY.
+cl2=0.100;		//Characteristic dimension for the elements along other regions of the domain.
 
-l = 30.0;		//Longitud total del dominio
-h = 15.0;		//Altura total del dominio
+l = 30.0;		//Total domain length.
+h = 15.0;		//Total domain height.
 
-l1=0.20;		//Ancho de la franja en la cual defino el strip, NO MODIFICAR
-l2=3.50;		//Longitud donde pongo la otra linea para disminuir cantidad de elementos
+l1=0.20;		//Width of the strip. DO NOT MODIFY
+l2=3.50;		//Length of the additional auxiliary line used to decrease the number of elements.
 
 //Points
 Point(1 ) = {0   , 0   , 0, cl1};
@@ -49,32 +49,42 @@ Line(19) = {15,  9};
 Line(20) = {14, 16};
 Line(21) = {16, 12};
 
-//Surfaces
+//Surfaces (Left strip)
+
 Line Loop(1) = {7, 8, -19, -15};
 Plane Surface(1) = {1};
 Transfinite Surface {1} Alternated;
 Recombine Surface {1};
+
+// Left strip-lower corner
 
 Line Loop(2) = {9, 10, 18, 19};
 Plane Surface(2) = {2};
 Transfinite Surface {2} Alternated;
 Recombine Surface {2};
 
+//Bottom strip
+
 Line Loop(3) = {-16, -18, 11, -21};
 Plane Surface(3) = {3};
 Transfinite Surface {3} Alternated;
 Recombine Surface {3};
 
+//Right strip-lower corner
 
 Line Loop(4) = {12, 13, 20, 21};
 Plane Surface(4) = {4};
 Transfinite Surface {4} Alternated;
 Recombine Surface {4};
 
+//Right strip
+
 Line Loop(5) = {1, -17, -20, 14};
 Plane Surface(5) = {5};
 Transfinite Surface {5} Alternated;
 Recombine Surface {5};
+
+//Domain enclosed by the strip
 
 Line Loop(6) = {2, 3, 4, 5, 6, 15, 16, 17};
 Plane Surface(6) = {6};
@@ -83,27 +93,28 @@ Recombine Surface {6};
 
 
 /*Physical surfaces
-A los elementos del strip se les asigna la superficie física 10000
-De ahí en adelante, se va creciendo cada mil.
-Por ejemplo, otra superficie, se llamará 11000, la otra 12000
-En el archivo de entrada, se colocan tantos materiales como
-superficies físicas se tengan en este archivo
+The strip elements are assigned physical surface 10000
+and each additional surface grows by units of 1000. For
+instance the next physical surface is assigned the id 11000.
+There are as many material profiles as physical surfaces.
 */
-Physical Surface(10000) = {1, 2, 3, 4, 5}; //Elementos incoming, strip
 
+// Incoming elements forming the strip
+Physical Surface(10000) = {1, 2, 3, 4, 5}; 
+
+// Elements inside the problem domain
 Physical Surface(11000) = {6};
 
-//Absorbing boundaries
-//Estos elementos tipo lineas, van por la parte externa del dominio
-//y ojo que van de derecha a izquierda.
-//OJO, que estos elementos van amarrados a la superficie física 10000, para poder sacar
-//solamente los elementos que son incoming
+/*Absorbing boundaries are located along the external boundary. These are line
+line elements defined from right to left. These elements are tied to the
+physical surface 10000.
+*/
+
 Physical Line(100) = {8, 9, 10, 11, 12, 13, 14};
 
-//Results to be printed out
-//Elementos línea en los cuales se va a escribir la respuesta, el programa de mallado
-//se encarga de tomar los nodos que están en estas lineas y eliminar los nodos
-//que se encuentran repetidos.
+/* The next physical line defines the location of points where
+displacement histories are desired.
+*/
 Physical Line(200) = {2, 6};
 
 //Mesh.SecondOrderIncomplete = 1;

@@ -1,7 +1,8 @@
 """
-Use meshio to read gmsh created meshes and generate input files
-for dynamic analysis with the explicit FEM code DAMIAN_par
-@autor Juan Gomez
+Use meshio to read gmsh created meshes and generate the input file
+*.inp to conduct dynamic analysis with the explicit FEM code WAVES.for
+@authors: Juan Gomez
+          Juan Vergara
 """
 from __future__ import division
 import meshio

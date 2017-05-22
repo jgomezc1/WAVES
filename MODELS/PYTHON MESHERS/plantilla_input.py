@@ -1,6 +1,6 @@
 """
 Use meshio to read gmsh created meshes and generate input files
-for dynamic analysis with the explicit FEM code DAMIAN_par
+for dynamic analysis with the explicit FEM code WAVES
 @autor Juan Gomez
 """
 from __future__ import division
@@ -55,6 +55,8 @@ results_id = [cont for cont, _ in enumerate(line_id[:]) if line_id[cont] == 200]
 results_nodes = elements2[results_id, :]
 results_nodes = results_nodes.flatten()
 results_nodes = list(set(results_nodes))
+#
+neles = nquads + len(abs_id)
 #
 np.savetxt("1nodes.txt", nodes_array,
            fmt=("%d", "%d", "%d" , "%d" , "%.4f", "%.4f"))

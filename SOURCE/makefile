@@ -1,9 +1,9 @@
 # ============================================================================
 # Name        : Makefile
-# Author      : Mechanic Aplicada
+# Author      : Mecanica Aplicada
 # Version     :
-# Copyright   : This is CopyRighted to Ricardo Serrano
-# Description : Makefile for Hello MPI World in Fortran
+# Copyright   : This is CopyRighted to Mecanica Aplicada
+# Description : Makefile for program WAVES
 # ============================================================================
 
 .PHONY: all clean
@@ -15,13 +15,13 @@ FC=gfortran -g3 -ggdb -fbounds-check -O3 -fopenmp
 FLAGS=
 FLAGS+=$(INCS) $(LIBS)
 
-SOURCES=mtxutil.for gaussin.for matutil.for femutil.for uelutil.for asemutil.for postproc.for preproc.for incodrm.for adamiant.for 
+SOURCES=mtxutil.for gaussin.for matutil.for femutil.for uelutil.for asemutil.for postproc.for preproc.for incodrm.for WAVES.for 
 
 OBJECTS=$(SOURCES:.for=.o)
 
-all: $(SOURCES) damiane.out
+all: $(SOURCES) WAVES.out
 
-damiane.out: $(OBJECTS)
+WAVES.out: $(OBJECTS)
 	$(FC) $(FLAGS) -o $@ $(OBJECTS)
 
 
@@ -29,7 +29,7 @@ damiane.out: $(OBJECTS)
 	$(FC) $(INCS) -c $< -o $@
 
 clean:
-	rm -f damiane.out *.mod *.o
+	rm -f WAVES.out *.mod *.o
 
 echo:
 	echo $(OBJS)
