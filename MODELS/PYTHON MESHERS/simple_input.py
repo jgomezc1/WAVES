@@ -1,6 +1,7 @@
 """
 Use meshio to read gmsh created meshes and generate the input file
 *.inp to conduct dynamic analysis with the explicit FEM code WAVES.for
+INPUT SCRIPT FOR 2D BOX UNDER POINT LOADS
 @authors: Juan Gomez
           Juan Vergara
 """
@@ -11,7 +12,7 @@ import fileinput
 import glob
 
 points, cells, point_data, cell_data , field_data = \
-    meshio.read("ModeloSimple.msh")
+    meshio.read("box2d.msh")
 #
 # Nodal Data
 #
@@ -50,6 +51,12 @@ els2_array[:, 3] = [mater_id[mat] for mat in mater]
 els2_array[: , 4] = 3
 els2_array[:, 5::] = elements2
 #
+#
+neles = nquads + nline3
+print "PARAMETERS FOR HEADING BLOCK"
+print npoints , neles , 2 , 1.0 , 2001 , 2 , 9 , 18 , 5 , 0 , 0 , 0
+print 20 , 1  
+#
 np.savetxt("1nodes.txt", nodes_array,
            fmt=("%d", "%d", "%d" , "%d" , "%.4f", "%.4f"))
 np.savetxt("4eles1.txt", els1_array, fmt="%d")
@@ -58,6 +65,6 @@ np.savetxt("5eles2.txt", els2_array, fmt="%d")
 
 file_list = glob.glob("*.txt")
 
-with open('malla_DAMIAN.inp', 'w') as file:
+with open('box2d.inp', 'w') as file:
     input_lines = fileinput.input(file_list)
     file.writelines(input_lines)

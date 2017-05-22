@@ -2,7 +2,7 @@
 Use meshio to read gmsh created meshes and generate input files
 for dynamic analysis with the explicit FEM code WAVES.
 INPUT SCRIPT FOR V-SHAPED CANYON
-@autor Juan Gomez
+@author Juan Gomez
 """
 from __future__ import division
 import meshio
@@ -18,13 +18,13 @@ points, cells, point_data, cell_data , field_data = \
 npoints = points.shape[0]
 nodes_array = np.zeros((npoints , 6))     # Dimensions the nodal points array of size npoints x 6
 nodes_array[: , 0] = range(1, npoints+1)  # Assigns nodal IDs starting with 1
-nodes_array[:, 4:6] = points[:, :2]       # Writes down two fields (starting in column 2 in th .msh file) in columns 4 and 5.
-nodes_array[nodes_array[:, 1]==0, 1] = 2  # Rites down the number of degrees of freedom per node.
+nodes_array[:, 4:6] = points[:, :2]       # Writes down two fields (starting in column 2 in the .msh file) in columns 4 and 5.
+nodes_array[nodes_array[:, 1]==0, 1] = 2  # Writes down the number of degrees of freedom per node.
 #
 # Half-space and strip elements
 # Quad9
 #
-elements1 = cells["quad9"] + 1            # Writes down element connevctivities (adds 1 to fortranize)
+elements1 = cells["quad9"] + 1            # Writes down element connectivities (adds 1 to fortranize)
 nquads = elements1.shape[0]
 els1_array = np.zeros([nquads, 14], dtype=int)
 els1_array[:, 0] = range(1, nquads + 1)
@@ -32,7 +32,7 @@ els1_array[: , 1] = 3                     # Assigns the element type according t
 els1_array[: , 2] = 18                    # Assigns the number of d.o.f for the element
 mater1 = cell_data['quad9']['physical']   # Captures the identifirs for the physical surfaces associatted to the elements
                                           # to be used in the specification of material profiles (10000 for strip; 11000 for half-space)
-mater_id1 = {10000: 1, 11000: 2}          # Dictionary storing material profiles (1 for strip; 2 for half-space)
+mater_id1 = {10000: 1, 11000: 2 , 12000: 1}          # Dictionary storing material profiles (1 for strip; 2 for half-space)
 els1_array[:, 3] = [mater_id1[mat] for mat in mater1]
 els1_array[:, 4]   = 9                                              # Number of nodes for the element
 els1_array[:, 5::] = elements1                                      # Writes down the element connectivities.
