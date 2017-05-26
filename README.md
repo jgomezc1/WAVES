@@ -14,7 +14,7 @@ mesher GMSH. The gmsh-created-files can be easily processed with simple python s
     Universidad EAFIT.
     
  ## Instructions
-The code is written in fortran moststly in fortran 77 syntax.
+The code is written in fortran; moststly in fortran 77 syntax.
 To use it clone the repo with
 
     git clone https://github.com/jgomezc1/WAVES.git
