@@ -15,7 +15,7 @@ FC=gfortran -g3 -ggdb -fbounds-check -O3 -fopenmp
 FLAGS=
 FLAGS+=$(INCS) $(LIBS)
 
-SOURCES=mtxutil.for gaussin.for matutil.for femutil.for uelutil.for asemutil.for postproc.for preproc.for incodrm.for WAVES.for 
+SOURCES=mtxutil.for gaussin.for matutil.for femutil.for uelutil.for asemutil.for postproc.for preproc.for incodrm.for WAVES.for
 
 OBJECTS=$(SOURCES:.for=.o)
 
