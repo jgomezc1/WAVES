@@ -288,11 +288,11 @@ C
             IF(JK.EQ.IJJ) THEN
               II=MXDOFDIM*IM-IR
             ELSE
-              IF(JK.EQ.IJJ+1) THEN
+cc              IF(JK.EQ.IJJ+1) THEN
                 II=MXDOFDIM*IM-IR+1
-              ELSE
-                II=MXDOFDIM*IM-IR+2
-              END IF
+cc              ELSE
+cc                II=MXDOFDIM*IM-IR+2
+cc              END IF
             END IF
 
 C       ASSEMBLES MASS AND INERTIAL FORCE
@@ -830,11 +830,11 @@ C
             IF(JK.EQ.IJJ) THEN
               II=MXDOFDIM*IM-IR
             ELSE
-              IF(JK.EQ.IJJ+1) THEN
+cc              IF(JK.EQ.IJJ+1) THEN
                 II=MXDOFDIM*IM-IR+1
-              ELSE
-                II=MXDOFDIM*IM-IR+2
-              END IF
+cc              ELSE
+cc                II=MXDOFDIM*IM-IR+2
+cc              END IF
             END IF
 
 C       ASSEMBLES MASS AND INERTIAL FORCE
