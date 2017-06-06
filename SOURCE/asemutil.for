@@ -285,14 +285,23 @@ C
         IJJ=LM(MXDOFDIM*IM-IR,IE)
         DO IK=1, MXDOFDIM
             JK=ID(IK,I)
-            IF(JK.EQ.IJJ) THEN
-              II=MXDOFDIM*IM-IR
-            ELSE
-cc              IF(JK.EQ.IJJ+1) THEN
-                II=MXDOFDIM*IM-IR+1
-cc              ELSE
-cc                II=MXDOFDIM*IM-IR+2
-cc              END IF
+            
+            IF(MXDOFDIM==2) THEN
+				IF(JK.EQ.IJJ) THEN
+				  II=MXDOFDIM*IM-IR
+				ELSE
+					II=MXDOFDIM*IM-IR+1
+				END IF
+			ELSE
+				IF(JK.EQ.IJJ) THEN
+              		II=MXDOFDIM*IM-IR
+            	ELSE
+              		IF(JK.EQ.IJJ+1) THEN
+                		II=MXDOFDIM*IM-IR+1
+              		ELSE
+                		II=MXDOFDIM*IM-IR+2
+              		END IF
+            	END IF
             END IF
 
 C       ASSEMBLES MASS AND INERTIAL FORCE
@@ -827,14 +836,23 @@ C
         IJJ=LM(MXDOFDIM*IM-IR,IE)
         DO IK=1, MXDOFDIM
             JK=ID(IK,I)
-            IF(JK.EQ.IJJ) THEN
-              II=MXDOFDIM*IM-IR
-            ELSE
-cc              IF(JK.EQ.IJJ+1) THEN
-                II=MXDOFDIM*IM-IR+1
-cc              ELSE
-cc                II=MXDOFDIM*IM-IR+2
-cc              END IF
+            
+            IF(MXDOFDIM==2) THEN
+				IF(JK.EQ.IJJ) THEN
+				  II=MXDOFDIM*IM-IR
+				ELSE
+					II=MXDOFDIM*IM-IR+1
+				END IF
+			ELSE
+				IF(JK.EQ.IJJ) THEN
+              		II=MXDOFDIM*IM-IR
+            	ELSE
+              		IF(JK.EQ.IJJ+1) THEN
+                		II=MXDOFDIM*IM-IR+1
+              		ELSE
+                		II=MXDOFDIM*IM-IR+2
+              		END IF
+            	END IF
             END IF
 
 C       ASSEMBLES MASS AND INERTIAL FORCE
