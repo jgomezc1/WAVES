@@ -49,14 +49,14 @@ Line(19) = {15,  9};
 Line(20) = {14, 16};
 Line(21) = {16, 12};
 
-//Surfaces (Left strip)
+//Plane Surfaces (Right strip)
 
 Line Loop(1) = {7, 8, -19, -15};
 Plane Surface(1) = {1};
 Transfinite Surface {1} Alternated;
 Recombine Surface {1};
 
-// Left strip-lower corner
+// Right strip-lower corner
 
 Line Loop(2) = {9, 10, 18, 19};
 Plane Surface(2) = {2};
@@ -70,14 +70,14 @@ Plane Surface(3) = {3};
 Transfinite Surface {3} Alternated;
 Recombine Surface {3};
 
-//Right strip-lower corner
+//Left strip-lower corner
 
 Line Loop(4) = {12, 13, 20, 21};
 Plane Surface(4) = {4};
 Transfinite Surface {4} Alternated;
 Recombine Surface {4};
 
-//Right strip
+//Left strip
 
 Line Loop(5) = {1, -17, -20, 14};
 Plane Surface(5) = {5};
@@ -93,29 +93,34 @@ Recombine Surface {6};
 
 
 /*Physical surfaces
-The strip elements are assigned physical surface 10000
-and each additional surface grows by units of 1000. For
-instance the next physical surface is assigned the id 11000.
+The strip elements are assigned physical surface 20000
 There are as many material profiles as physical surfaces.
 */
 
 // Incoming elements forming the strip
-Physical Surface(10000) = {1, 2, 3, 4, 5}; 
+Physical Surface(20000) = {1, 3 , 5}; 
+
+// Elements sorrounding the strip
+Physical Surface(10000) = {2 , 4 };
 
 // Elements inside the problem domain
-Physical Surface(11000) = {6};
+Physical Surface(30000) = {6};
 
 /*Absorbing boundaries are located along the external boundary. These are line
-line elements defined from right to left. These elements are tied to the
+ elements defined from right to left. These elements are tied to the
 physical surface 10000.
 */
-
 Physical Line(100) = {8, 9, 10, 11, 12, 13, 14};
 
 /* The next physical line defines the location of points where
 displacement histories are desired.
 */
-Physical Line(200) = {2, 6};
+Physical Line(200) = {15, 16 , 17};
+
+
+Transfinite Line {1  , 20} = 1 Using Progression 1;
+Transfinite Line {7  , 19} = 1 Using Progression 1;
+Transfinite Line {21 , 18} = 1 Using Progression 1;
 
 //Mesh.SecondOrderIncomplete = 1;
 
