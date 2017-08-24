@@ -25,8 +25,9 @@ C
 
       INTEGER, ALLOCATABLE, DIMENSION(:):: LB, LEE, LE      
 C
-      CALL CLEARV(U0 ,NDOFEL)
-      CALL CLEARV(U00,NDOFEL)
+      U0=0.0D0
+      U00=0.0D0
+      
 
 C     Evaluate incoming displacements at time t.
 
@@ -109,8 +110,9 @@ C     Identifies DOF in LB.
             END IF
         END DO
 
-        CALL CLEARV(R00,NDOFEL)
-        CALL CLEARV(RP,NDOFEL)
+        R00=0.0D0
+        RP=0.0D0
+
         RP=MATMUL(AMATRX, U00)
 
 C     Assembles effective forces.
@@ -123,13 +125,13 @@ C     Assembles effective forces.
             END IF
         END DO
 
-        CALL CLEARV(U00,NDOFEL)
+        U00=0.0D0
 
         DO I=1,NDOFEL
             U00(I)=U0(I)
         END DO
-      
-        CALL CLEARV(RP,NDOFEL)
+
+        RP=0.0D0
 
 C     Identifies DOF in LE.
 
@@ -248,8 +250,9 @@ C     Identifies DOF in LB.
             END IF
         END DO
 
-        CALL CLEARV(R00,NDOFEL)
-        CALL CLEARV(RP,NDOFEL)
+        R00=0.0D0
+        RP=0.0D0
+
         RP=MATMUL(AMATRX, U00)
 
 C     Assembles effective forces.
@@ -262,13 +265,13 @@ C     Assembles effective forces.
             END IF
         END DO
 
-        CALL CLEARV(U00,NDOFEL)
+        U00=0.0D0
 
         DO I=1,NDOFEL
             U00(I)=U0(I)
         END DO
-      
-        CALL CLEARV(RP,NDOFEL)
+
+        RP=0.0D0
 
 C     Identifies DOF in LE.
 
@@ -324,10 +327,8 @@ C23456789012345678901234567890123456789012345678901234567890123456789012
      
       INTEGER, ALLOCATABLE, DIMENSION(:):: LB, LEE, LE
       
-
-      CALL CLEARV(U0 ,NDOFEL)
-      CALL CLEARV(U00,NDOFEL)
-
+      U0=0.0D0
+	  U00=0.0D0
 C     Evaluate incoming displacements at time t.
 
       CALL DISPINCT8(IDF,U0,COORDS,NNODE,PROPS,NPROPS,MCRD,
@@ -405,8 +406,9 @@ C     Identifies DOF in LB.
             END IF
         END DO
 
-        CALL CLEARV(R00,NDOFEL)
-        CALL CLEARV(RP,NDOFEL)
+        R00=0.0D0
+        RP=0.0D0
+        
         RP=MATMUL(AMATRX, U00)
 
 C     Assembles effective forces.
@@ -419,13 +421,13 @@ C     Assembles effective forces.
             END IF
         END DO
 
-        CALL CLEARV(U00,NDOFEL)
+        U00=0.0D0
 
         DO I=1,NDOFEL
             U00(I)=U0(I)
         END DO
       
-        CALL CLEARV(RP,NDOFEL)
+        RP=0.0D0
 
 C     Identifies DOF in LE.
 
@@ -540,8 +542,9 @@ C     Identifies DOF in LB.
             END IF
         END DO
 
-        CALL CLEARV(R00,NDOFEL)
-        CALL CLEARV(RP,NDOFEL)
+        R00=0.0D0
+        RP=0.0D0
+
         RP=MATMUL(AMATRX, U00)
 
 C     Assembles effective forces.
@@ -554,13 +557,13 @@ C     Assembles effective forces.
             END IF
         END DO
 
-        CALL CLEARV(U00,NDOFEL)
+        U00=0.0D0
 
         DO I=1,NDOFEL
             U00(I)=U0(I)
         END DO
       
-        CALL CLEARV(RP,NDOFEL)
+        RP=0.0D0
 
 C     Identifies DOF in LE.
 
@@ -616,9 +619,8 @@ C23456789012345678901234567890123456789012345678901234567890123456789012
      
       INTEGER, ALLOCATABLE, DIMENSION(:):: LB, LEE, LE
       
-
-      CALL CLEARV(U0 ,NDOFEL)
-      CALL CLEARV(U00,NDOFEL)
+	  U0=0.0D0
+	  U00=0.0D0
 
 C     Evaluate incoming displacements at time t.
 
@@ -685,8 +687,9 @@ C     Identifies DOF in LB.
             END IF
         END DO
 
-        CALL CLEARV(R00,NDOFEL)
-        CALL CLEARV(RP,NDOFEL)
+        R00=0.0D0
+        RP=0.0D0
+
         RP=MATMUL(AMATRX, U00)
 
 C     Assembles effective forces.
@@ -699,13 +702,13 @@ C     Assembles effective forces.
             END IF
         END DO
 
-        CALL CLEARV(U00,NDOFEL)
+        U00=0.0D0
 
         DO I=1,NDOFEL
             U00(I)=U0(I)
         END DO
       
-        CALL CLEARV(RP,NDOFEL)
+        RP=0.0D0
 
 C     Identifies DOF in LE.
 
@@ -804,8 +807,9 @@ C     Identifies DOF in LB.
             END IF
         END DO
 
-        CALL CLEARV(R00,NDOFEL)
-        CALL CLEARV(RP,NDOFEL)
+        R00=0.0D0
+        RP=0.0D0
+
         RP=MATMUL(AMATRX, U00)
 
 C     Assembles effective forces.
@@ -818,13 +822,13 @@ C     Assembles effective forces.
             END IF
         END DO
 
-        CALL CLEARV(U00,NDOFEL)
+        U00=0.0D0
 
         DO I=1,NDOFEL
             U00(I)=U0(I)
         END DO
       
-        CALL CLEARV(RP,NDOFEL)
+        RP=0.0D0
 
 C     Identifies DOF in LE.
 

@@ -3,7 +3,7 @@ C23456789012345678901234567890123456789012345678901234567890123456789012
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C                                                                      C
-C   --------P R O G R A M   W A V E S   E X P L I C I T--------------  C
+C   --------P R O G R A M   D A M I A N   E X P L I C I T------------  C
 C                       Finite Element Method                          C
 C                                                                      C
 C   EXPLICIT TIME DOMAIN PLANE STRAIN ANALYSIS FOR FINITE DOMAINS.     C
@@ -11,16 +11,14 @@ C                                                                      C
 C  DYNAMIC MEMORY ALLOCATION                                           C
 C  EAFIT UNIVERSITY                                                    C
 C  APPLIED MECHANICS LAB                                               C
-C  MAY 20/2017                                                         C
+C  JANUARY 14/2017                                                     C
 C                                                                      C
 C  UNIX VERSION                                                        C
 C                                                                      C
 C            P R O B L E M   P A R A M E T E R S                       C
-C---HEADING BLOCK------------------------------------------------------C
-C  FILENAME  :STRING DEFINIG THE  JOB NAME                             C
-C---PRE-PROCESSING BLOCK-----------------------------------------------C                                                                     C
+C                                                                      C
 C  NUMNP     :NUMBER OF NODAL POINTS                                   C
-C  NUMEL     :NUMBER OF ELEMENTS                                       C
+C  NUMEL     :UMBER OF ELEMENTS                                        C
 C  NUMAT     :NUMBER OF MATERIAL PROFILES                              C
 C  TM        :SIZE OF THE TIME WINDOW.                                 C
 C  NINCR     :NUMBER OF INCREMENTS                                     C
@@ -29,11 +27,8 @@ C  NMNE      :MAXIMUM NUMBER OF NODES PER ELEMENT                      C
 C  NMDOFEL   :MAXIMUM NUMBER OF DOF PER ELEMENT                        C
 C  NMPR      :MAXIMUM NUMBER OF MATERIAL PROPERTIES IN A PROFILE       C
 C  NIPR      :MAXIMUM NUMBER OF INTEGER MAT PROPERTIES IN A PROFILE    C
-C  NPL       :NUMBER OF POINT LOADS (0 FOR PLANE WAVE ANALYSIS)        C
+C  NPL       :NUMBER OF POINT LOADS                                    C
 C  NIMP      :NUMBER OF POINTS FOR OUTPUT                              C
-C---POST-PROCESSING BLOCK----------------------------------------------C
-C  IPHOTO    :                                                         C
-C  NTH       :                                                         C                                         
 C                                                                      C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -44,7 +39,7 @@ C                                                                      C
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C23456789012345678901234567890123456789012345678901234567890123456789012
 C
-      PROGRAM WAVES_EXPLICIT
+      PROGRAM DAMIAN_EXPLICIT
 
       USE OMP_LIB
       IMPLICIT REAL*8(A-H,O-Z)
@@ -82,10 +77,6 @@ C     *****************************************************************C
       ICOORD=4444
       WRITE(*,*) 'INPUT THE JOB NAME(max 10 characters):'
       READ(*,*) FILENAME
-C  OPEN(10,FILE='File.txt')
-C  	READ(10,*) FILENAME
-C  CLOSE(10)
-C     FILENAME="PruebaP"
       LST=LEN_TRIM(FILENAME)
       OPEN(UNIT=IIN,FILE =FILENAME(1:LST)//".inp",FORM='FORMATTED')
       OPEN(UNIT=IOUT,FILE=FILENAME(1:LST)//".dat",FORM='FORMATTED')
@@ -106,13 +97,12 @@ C     READS PROBLEM DEFINITION PARAMETERS.
       WRITE(*,*)
 
       READ(IIN,     *) NUMNP,NUMEL,NUMAT,TM,NINCR,NDOFDIM,NMNE,NMDOFEL,
-     1                 NMPR,NIPR,NPL,NIMP
+     1                 NMPR,NIPR,NPL,ITPL,NIMP
       READ(IIN,     *) IPHOTO, NTH
 
-C	OJO QUE ESTO ES PARA LEER CARGAS DESDE UN ARCHIVO
-C     IF (NPL.NE.0) THEN
-C       OPEN(UNIT=ILOAD,FILE=FILENAME(1:LST)//".load")
-C     END IF
+      IF (ITPL==1) THEN
+        OPEN(UNIT=ILOAD,FILE=FILENAME(1:LST)//".load")
+      END IF
 
       IF (NIMP.NE.0) THEN
         ALLOCATE(ISTOUT(NIMP))
@@ -135,10 +125,10 @@ C$ CALL OMP_SET_NUM_THREADS(NTH)
 C$OMP PARALLEL
 
 C$OMP SINGLE
-      CALL CLEARIV(IDPL, NPL)
-      CALL CLEARIM(ID,NDOFDIM,NUMNP)
-      CALL CLEARIV(NDOFN,NUMNP)
-      CALL CLEAR(COORD,NDOFDIM,NUMNP)
+      IDPL=0
+      ID=0
+      NDOFN=0
+      COORD=0.0D0
 C
       CALL NODINP(NUMNP,ID,NDOFDIM,COORD,NDOFN,NEQ,IIN,IOUT)
 C$OMP END SINGLE
@@ -161,17 +151,17 @@ C$OMP SECTION
 C     CLEARS STORAGE.
 
 C$OMP SECTION
-      CALL CLEARIV(MATP,NUMEL)
-      CALL CLEARIV(NMATP,NUMAT)
-      CALL CLEARIV(NIMTP,NUMAT)
-      CALL CLEAR(AMATE,NMPR,NUMAT)
-      CALL CLEARIM(IMTEI,NIPR,NUMAT)
-      CALL CLEARIV(IELT,NUMEL)
-      CALL CLEARIV(NNE,NUMEL)
-      CALL CLEARIV(NDOFEL,NUMEL)
-      CALL CLEARIM(IELCON,NMNE,NUMEL)
-      CALL CLEARIM(LM,NMDOFEL,NUMEL)
-      CALL CLEARIV(NIEL,NUMNP)
+      MATP=0
+      NMATP=0
+      NIMTP=0
+      AMATE=0.0D0
+      IMTEI=0
+      IELT=0
+      NNE=0
+      NDOFEL=0
+      IELCON=0
+      LM=0
+      NIEL=0
 
 C     READS MODEL
 
@@ -191,7 +181,7 @@ C     READS MODEL
       CALL ELEINP(NUMNP,NUMEL,NNE,IELT,NDOFEL,NMNE,MATP,IELCON,
      1            NUMPARA,IIN,IOUT)
 
-      CALL POINTLOAD(NUMNP,NDOFDIM,NPL,ID,IDPL,IIN)
+	  CALL POINTLOAD(NUMNP,NDOFDIM,NPL,ID,IDPL,IIN)
 
       CALL IMPHIST(NIMP,ISTOUT,IIN)
 
@@ -199,10 +189,10 @@ C     Print nodal coordinates of points at which output is required.
 
       IF (NIMP.NE.0) THEN
 
-	  	OPEN(UNIT=IDISP,FILE=FILENAME(1:LST)//".disp")
-	  	OPEN(UNIT=IVEL,FILE=FILENAME(1:LST)//".vel")
-	  	OPEN(UNIT=IACEL,FILE=FILENAME(1:LST)//".acel")
-	  	OPEN(UNIT=ICOORD,FILE=FILENAME(1:LST)//".coord")
+	  	OPEN(UNIT=IDISP,FILE="../Results/"//FILENAME(1:LST)//".disp")
+	  	OPEN(UNIT=IVEL,FILE="../Results/"//FILENAME(1:LST)//".vel")
+	  	OPEN(UNIT=IACEL,FILE="../Results/"//FILENAME(1:LST)//".acel")
+	  	OPEN(UNIT=ICOORD,FILE="../Results/"//FILENAME(1:LST)//".coord")
 
         DO I=1, NIMP
             J=ISTOUT(I)
@@ -243,12 +233,10 @@ C
      1                 NDOFDIM,NMDOFEL,IELT,IELCON,ILIST,LPLIST,
      2                 NIEL,NDOFN,NDOFEL,MATP,NMATP,NMPR,NIMTP,
      3                 NIPR,AMATE,IMTEI,AWAVE,IWAVE,COORD,LM,ID,
-     4                 IDPL,NPL,NEQ,IOUT,DT,NINCR,KINC,AG,VG,NTH,
+     4                 IDPL,NPL,ITPL,NEQ,IOUT,DT,NINCR,KINC,AG,VG,NTH,
      5				   NMELNOD,NPINCO,LINCO,INCOMI,ILOAD)
 
-C	 ESTO ES PARA EL ARCHIVO CON LAS CARGAS
-C  OPEN(UNIT=ILOAD,FILE=FILENAME(1:LST)//".load")
-
+	  OPEN(UNIT=ILOAD,FILE=FILENAME(1:LST)//".load")
 C$ CALL OMP_SET_NUM_THREADS(NTH)
 C$OMP PARALLEL
 C$OMP DO
@@ -285,13 +273,13 @@ C     INCREMENTATION BEGINS
      1                   NDOFDIM,NMDOFEL,IELT,IELCON,ILIST,LPLIST,
      2                   NIEL,NDOFN,NDOFEL,MATP,NMATP,NMPR,NIMTP,
      3                   NIPR,AMATE,IMTEI,AWAVE,IWAVE,COORD,LM,ID,
-     4                   IDPL,NPL,NEQ,IOUT,DT,NINCR,KINC,NTH,
+     4                   IDPL,NPL,ITPL,NEQ,IOUT,DT,NINCR,KINC,NTH,
      5					 NMELNOD,NPINCO,LINCO,INCOMI,ILOAD)
 
         III=III+1
         IF (III==IPHOTO) THEN
             CALL ESCVTK(NMNE,NUMNP,NUMPARA,NEQ,NDOFDIM,JJJ,COORD,
-     1                  IELCON,ID,NUMEL,UTMAST)
+     1                  IELCON,IELT,ID,NUMEL,UTMAST)
             JJJ=JJJ+1
             III=0
         END IF

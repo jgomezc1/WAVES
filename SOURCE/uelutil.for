@@ -53,19 +53,19 @@ C     Rayleigh damping parameters.
       AALFA=PROPS(1)
       ABETA=PROPS(2)
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+	  DDSDDE=0.0D0
+	  B =0.0D0
+	  BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -89,27 +89,27 @@ C       Computes B matrix.
 
         CALL STDM9(NNODE,NDOFEL,NDI,COORDS,MCRD,B,DDET,RII,SII,
      1             XBAR)
+
         SMT=SMT+RO*DDET*XBAR*ALF
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 C
         CALL AMASS9(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrix.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
 C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -165,19 +165,19 @@ C     Rayleigh damping parameters.
       AALFA=PROPS(1)
       ABETA=PROPS(2)
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+	  DDSDDE=0.0D0
+	  B =0.0D0
+	  BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -205,23 +205,22 @@ C       Computes B matrix.
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 C
         CALL AMASS8(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrix.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
 C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -277,19 +276,19 @@ C     Rayleigh damping parameters.
       AALFA=PROPS(1)
       ABETA=PROPS(2)
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+	  DDSDDE=0.0D0
+	  B =0.0D0
+	  BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -317,23 +316,22 @@ C       Computes B matrix.
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 C
         CALL AMASS6(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrix.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
 C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -389,19 +387,19 @@ C     Rayleigh damping parameters.
       AALFA=PROPS(1)
       ABETA=PROPS(2)
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+	  DDSDDE=0.0D0
+	  B =0.0D0
+	  BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -429,23 +427,22 @@ C       Computes B matrix.
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 
         CALL AMASS4(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrix.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
 C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -499,23 +496,23 @@ C     Rayleigh damping constants.
 
 C     Clears arrays.
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEARV(R00,NDOFEL)
-      CALL CLEARV(RELA,NDOFEL)
-      CALL CLEARV(RINE,NDOFEL)
-      CALL CLEARV(RDAM,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+      DDSDDE=0.0D0
+      B=0.0D0
+      BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      R00=0.0D0
+      RELA=0.0D0
+      RINE=0.0D0
+      RDAM=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -543,23 +540,22 @@ C       Computes B and mass matrix.
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 
         CALL AMASS9(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrices.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
-C       Updates stiffness and mass matrices.
+C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -577,7 +573,7 @@ C     forces R00(n).
 C     Updates the effective loads
 C     loads vector RHS=R00(n)-Kij*Uj-MII*Ai-alpha*Kij*Vj....
 
-      CALL UPDVEC(RHS,NDOFEL,R00)
+      RHS=RHS+R00
 
       RETURN
 
@@ -624,23 +620,23 @@ C     Rayleigh damping constants.
 
 C     Clears arrays.
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEARV(R00,NDOFEL)
-      CALL CLEARV(RELA,NDOFEL)
-      CALL CLEARV(RINE,NDOFEL)
-      CALL CLEARV(RDAM,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+      DDSDDE=0.0D0
+      B=0.0D0
+      BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      R00=0.0D0
+      RELA=0.0D0
+      RINE=0.0D0
+      RDAM=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -668,23 +664,22 @@ C       Computes B and mass matrix.
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 
         CALL AMASS8(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrices.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
-C       Updates stiffness and mass matrices.
+C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -702,7 +697,7 @@ C     forces R00(n).
 C     Updates the effective loads
 C     loads vector RHS=R00(n)-Kij*Uj-MII*Ai-alpha*Kij*Vj....
 
-      CALL UPDVEC(RHS,NDOFEL,R00)
+      RHS=RHS+R00
 
       RETURN
 
@@ -750,23 +745,23 @@ C     Rayleigh damping parameters.
 
 C     Clears arrays.
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NDI,NDI)
-      CALL CLEAR(B,NDI,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NDI)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,2,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NDI,NDOFEL)
-      CALL CLEARV(R00,NDOFEL)
-      CALL CLEARV(RELA,NDOFEL)
-      CALL CLEARV(RINE,NDOFEL)
-      CALL CLEARV(RDAM,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+      DDSDDE=0.0D0
+      B=0.0D0
+      BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      R00=0.0D0
+      RELA=0.0D0
+      RINE=0.0D0
+      RDAM=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -794,23 +789,22 @@ C       Computes B matrix.
 
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NDI,NDI,B,NDI,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NDI)
-        CALL MTRAN(B,NDI,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NDI,AUX1,NDI,NDOFEL,FRST1)
+	  	AUX1=MATMUL(DDSDDE,B)
+	  	BT=TRANSPOSE(B)
+	  	FRST1=MATMUL(BT,AUX1)
 
         CALL AMASS4(FRST2,NDOFEL,RII,SII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrix.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
 C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -828,7 +822,7 @@ C     forces R00(n).
 C     Updates the effective loads
 C     loads vector RHS=R00(n)-Kij*Uj-MII*Ai-alpha*Kij*Vj....
 
-      CALL UPDVEC(RHS,NDOFEL,R00)
+      RHS=RHS+R00
 
       RETURN
 
@@ -896,10 +890,10 @@ C     Constitutive tensor
       RM(1,2)=  ST
       RM(2,1)= -ST
       RM(2,2)=  CT
-    
-      CALL MTRAN(RM,2,2,RMT)
-      CALL MMULT(RMT,2,2,DDSDDE,2,2,DAUX)
-      CALL MMULT(DAUX,2,2,RM,2,2,DDSDDET)
+
+      RMT=TRANSPOSE(RM)
+      DAUX=MATMUL(RMT,DDSDDE)
+      DDSDDET=MATMUL(DAUX,RM)
 
       CALL GAUSS1D(XGP,WGP)
 
@@ -908,13 +902,13 @@ C     Constitutive tensor
         ALF =WGP(N)
         CALL SHAPE1D(AUXT,ETA)
 
-        CALL MMULT(AUXT,6,2,DDSDDET,2,2,RLL)
-        CALL MTRAN(AUXT,6,2,AUX)
-        CALL MMULT(RLL,6,2,AUX,2,6,RL)
+        RLL=MATMUL(AUXT, DDSDDET)
+	  	AUX=TRANSPOSE(AUXT)
+	  	RL=MATMUL(RLL,AUX)
         AMATRX=AMATRX-RL*ALF*DETJAC
       END DO
 
-      CALL MAVEC(AMATRX,NDOFEL,NDOFEL,V,RHS)
+      RHS=MATMUL(AMATRX,V)
 
       RETURN
 
@@ -981,8 +975,6 @@ C     Constitutive tensor
       DDSDDET= MATMUL(RM, DDSDDE)
 	  
 	  CALL GPOINTS2X2(XGP,WGP)
-c	  SI ESTA MULTIPLICACIÓN ESTÁ ANTES DE GPOINTS2X2, SE MODIFICA DDSDDE
-c	  NO TIENE PORQUE PASAR ESO.
 	  DDSDDE = MATMUL(DDSDDET, RMT)
 	  
 	  SMT= 0.0D0
@@ -1003,8 +995,7 @@ c	  NO TIENE PORQUE PASAR ESO.
 	  	RL= MATMUL(RLL, AUX)
         AMATRX=AMATRX-RL*ALF*DETJAC
       END DO
-C	  APROXIMADAMENTE EN EL CICLO 80 SE DE DESBORDA EL MODELO, AL PARECER POR UN VALOR
-C	  MUY ALTO DE LA VELOCIDAD.
+
       CALL MAVEC(AMATRX,NDOFEL,NDOFEL,V,RHS)
 	  
       RETURN
@@ -1041,9 +1032,6 @@ C     Parameter arrays from UEL.f
      3          AMATRX(NDOFEL,NDOFEL),DDSDDE(2,2),XGP(6),VIN(6),
      4          WGP(6),AUX(2,6),AUXT(6,2),RL(6,6),RLL(6,2),A(NDOFEL)
 
-C     CALL CLEARV(RHS,NDOFEL)
-C     CALL CLEARV(ANMASS,NDOFEL)
-C     CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
       AMATRX=0.0D0
       VIN=0.0D0
       PPV=0.0D0
@@ -1079,17 +1067,20 @@ C     Constitutive tensor
         ALF=WGP(N)
         CALL SHAPE1D(AUXT,ETA)
 
-        CALL MMULT(AUXT,6,2,DDSDDE,2,2,RLL)
-        CALL MTRAN(AUXT,6,2,AUX)
-        CALL MMULT(RLL,6,2,AUX,2,6,RL)
+        RLL=MATMUL(AUXT,DDSDDE)
+        AUX=TRANSPOSE(AUXT)
+        RL=MATMUL(RLL,AUX)
+        
         AMATRX=AMATRX-RL*ALF*DETJAC
       END DO
       
       CALL UPULSEV(PPV,NINCR,DT,AWAVE,KINC)
+      
       VIN(1)=PPV
       VIN(3)=PPV
       VIN(5)=PPV
-      CALL MAVEC(AMATRX,NDOFEL,NDOFEL,VIN,RHS)
+
+      RHS=MATMUL(AMATRX,VIN)
 
       RETURN
 
@@ -1123,9 +1114,6 @@ C     Parameter arrays from UEL.f
      3          XGP(4),WGP(4),DDSDDET(2,2), DAUX(2,2),AUX(2,4),
      4          AUXT(4,2),RL(4,4),RLL(4,2),RM(2,2),RMT(2,2),A(NDOFEL)
 
-C     CALL CLEARV(RHS,NDOFEL)
-C     CALL CLEARV(ANMASS,NDOFEL)
-C     CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
       AMATRX=0.0D0
 
 C     Wave propagation velocities
@@ -1158,27 +1146,25 @@ C     Constitutive tensor
       RM(2,1)= -ST
       RM(2,2)=  CT
     
-      CALL MTRAN(RM,2,2,RMT)
-      CALL MMULT(RMT,2,2,DDSDDE,2,2,DAUX)
-      CALL MMULT(DAUX,2,2,RM,2,2,DDSDDET)
+      RMT=TRANSPOSE(RM)
+      DAUX=MATMUL(RMT,DDSDDE)
+      DDSDDET=MATMUL(DAUX,RM)
 
       CALL GAUSS1D(XGP,WGP)
-C     CALL CLEAR(RL,4,4)
-C     CALL CLEAR(RLL,4,4)
 
       DO N=1,4
         ETA =XGP(N)
         ALF=WGP(N)
         CALL SHAPE1D(AUXT,ETA)
 
-        CALL MMULT(AUXT,4,2,DDSDDET,2,2,RLL)
-        CALL MTRAN(AUXT,4,2,AUX)
-        CALL MMULT(RLL,4,2,AUX,2,4,RL)
+        RLL=MATMUL(AUXT,DDSDDET)
+        AUX=TRANSPOSE(AUXT)
+        RL=MATMUL(RLL,AUX)
+
         AMATRX=AMATRX-RL*ALF*DETJAC
-C       CALL CLEAR(RL,NDOFEL,NDOFEL)
       END DO
 
-      CALL MAVEC(AMATRX,NDOFEL,NDOFEL,V,RHS)
+      RHS=MATMUL(AMATRX,V)
 
       RETURN
 
@@ -1227,19 +1213,19 @@ C     Rayleigh damping parameters.
       AALFA=PROPS(1)
       ABETA=PROPS(2)
 
-      CALL CLEARV(RHS,NDOFEL)
-      CALL CLEARV(ANMASS,NDOFEL)
-      CALL CLEAR(DDSDDE,NTENS,NTENS)
-      CALL CLEAR(B,NTENS,NDOFEL)
-      CALL CLEAR(BT,NDOFEL,NTENS)
-      CALL CLEAR(FRST2,NDOFEL,NDOFEL)
-      CALL CLEAR(FRST1,NDOFEL,NDOFEL)
-      CALL CLEAR(XP,3,NGPTS)
-      CALL CLEARV(XW,NGPTS)
-      CALL CLEAR(AUX1,NTENS,NDOFEL)
-      CALL CLEAR(AMATRX,NDOFEL,NDOFEL)
-      CALL CLEAR(AMASS,NDOFEL,NDOFEL)
-      CALL CLEAR(CDMAT,NDOFEL,NDOFEL)
+      RHS=0.0D0
+      ANMASS=0.0D0
+      DDSDDE=0.0D0
+      B=0.0D0
+      BT=0.0D0
+      FRST2=0.0D0
+      FRST1=0.0D0
+      XP=0.0D0
+      XW=0.0D0
+      AUX1=0.0D0
+      AMATRX=0.0D0
+      AMASS=0.0D0
+      CDMAT=0.0D0
 
 C       Elasticity tensor.
 
@@ -1270,23 +1256,22 @@ C       Computes B matrix.
 	  
 C       Assembles stiffness and mass matrix.
 
-        CALL MMULT(DDSDDE,NTENS,NTENS,B,NTENS,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NTENS)
-        CALL MTRAN(B,NTENS,NDOFEL,BT)
-        CALL MMULT(BT,NDOFEL,NTENS,AUX1,NTENS,NDOFEL,FRST1)
+        AUX1=MATMUL(DDSDDE,B)
+        BT=TRANSPOSE(B)
+        FRST1=MATMUL(BT,AUX1)
 C
         CALL AMASS3D8(FRST2,NDOFEL,RII,SII,TII)
 
 C       Considers Gauss weight and Jacobian determinant
 C       into partial stiffness and mass matrix.
 
-        CALL SMULT(FRST1,NDOFEL,NDOFEL,ALF*DDET*XBAR)
-        CALL SMULT(FRST2,NDOFEL,NDOFEL,ALF*DDET*XBAR*RO)
+        FRST1=FRST1*(ALF*DDET*XBAR)
+        FRST2=FRST2*(ALF*DDET*XBAR*RO)
 
 C       Updates stiffness and mass matrix.
 
-        CALL UPDMAT(AMATRX,NDOFEL,NDOFEL,FRST1)
-        CALL UPDMAT(AMASS ,NDOFEL,NDOFEL,FRST2)
+        AMATRX=AMATRX+FRST1
+        AMASS=AMASS+FRST2
 
       END DO
 
@@ -1391,7 +1376,6 @@ c    1             XBAR)
 C       Assembles stiffness and mass matrix.
 
         CALL MMULT(DDSDDE,NTENS,NTENS,B,NTENS,NDOFEL,AUX1)
-        CALL CLEAR(BT,NDOFEL,NTENS)
         CALL MTRAN(B,NTENS,NDOFEL,BT)
         CALL MMULT(BT,NDOFEL,NTENS,AUX1,NTENS,NDOFEL,FRST1)
 C

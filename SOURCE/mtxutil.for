@@ -125,7 +125,6 @@ C
 C
       DIMENSION A(NRA,NCA),B(NCA,NRA)
 C
-      CALL CLEAR(B,NCA,NRA)
       DO I=1,NRA
         DO J=1,NCA
           B(J,I)=A(I,J)
