@@ -1,7 +1,7 @@
-//Cuidado que todo lo tengo amplificado por 10.0
+//HEADING BLOCK
+//For accuracy all dimensions have been scaled by a factor of 10.0
 cl1=0.100;		//Characteristic dimension of the incoming elements. DO NOT MODIFY.
 cl2=0.250;		//Characteristic dimension for the elements along other regions of the domain.
-
 l = 15.0;		//Total domain length.
 h =  7.5;		//Total domain height.
 

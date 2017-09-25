@@ -189,9 +189,9 @@ C     Print nodal coordinates of points at which output is required.
 
       IF (NIMP.NE.0) THEN
 
-	  	OPEN(UNIT=IDISP,FILE="../Results/"//FILENAME(1:LST)//".disp")
-	  	OPEN(UNIT=IVEL,FILE="../Results/"//FILENAME(1:LST)//".vel")
-	  	OPEN(UNIT=IACEL,FILE="../Results/"//FILENAME(1:LST)//".acel")
+	  	OPEN(UNIT=IDISP ,FILE="../Results/"//FILENAME(1:LST)//".disp")
+	  	OPEN(UNIT=IVEL  ,FILE="../Results/"//FILENAME(1:LST)//".vel")
+	  	OPEN(UNIT=IACEL ,FILE="../Results/"//FILENAME(1:LST)//".acel")
 	  	OPEN(UNIT=ICOORD,FILE="../Results/"//FILENAME(1:LST)//".coord")
 
         DO I=1, NIMP
