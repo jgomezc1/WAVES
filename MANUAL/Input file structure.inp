@@ -1,0 +1,79 @@
+--------------------------------------
+------------HEADING BLOCK-------------
+--------------------------------------
+Title
+NNODES     NUMEL   NMAT   Tm  NINCS    NDIM    NMNE    NMDOFE     NMRMAT     NMIMAT     NPLOADS     IMODE    NOUTPU
+NSNAP  NPROCESS
+
+NNODES  : Total number of nodes.
+NUMEL   : Total number of elements.
+NMAT    : Total number of material profiles.
+Tm      : Duration of the analysis.
+NINCS   : Total number of increments.
+NDIM    : Problem dimensionality.
+NMNE    : Maximum number of nodes per element.
+NMDOFE  : Maximum number of degrees of freedom per element.
+NMRMAT  : Maximum number of real material properties in a given profile.
+NMRMAT  : Maximum number of integer material properties in a given profile.
+NPLOADS : Number of point loads.     
+IMODE   : Point load application mode (0 for Ricker pulse; 1 for an input file)    
+NOUTPU  : Number of points where output is required.
+NSNAP   : Snapshot increment for the creation of VTK fils.
+NPROCESS: Number of processors.
+--------------------------------------
+------------NODAL BLOCK---------------
+--------------------------------------
+As many data lines as specified by NNODES with the following data:
+ID_NODE NDOF  BC-1   BC-2....BC-NDOF   X-coord    Y-coord
+ID_NODE  :Nodal identifier. 
+NDOF     :Number of degrees of freedom at the current node.  
+BC-1   BC-2....BC-NDOF:Boundary condition flag for each one of the NDOF degrees of freedom (0 free; 1 restrained)   
+X-coord  :X-coordinate of the current node.    
+Y-coord  :Y-coordinate of the current node.
+----------------------------------------
+------------MATERIAK BLOCK--------------
+----------------------------------------
+As many data lines as specified by NMAT with the following data:
+MAT_ID     NMRMAT   NMIMAT    Par-1   Par-2...Par-NRMAT    IPAR-1   IPAR-2...IPAR-NMIMAT
+MAT_ID   :Material profile identifier.
+NMRMAT   :Number of real material properties for this profile.   
+NMIMAT   :Number of integer material properties for this profile.    
+Par-1   Par-2...Par-NRMAT    :Real material properties. (In a classic 2D wave propagation analysis the parameters are
+P-wave velocity; SV wave velocity; mass density; alpha Rayleigh damping parameter; Beta Rayleigh damping parameter)
+IPAR-1   IPAR-2...IPAR-NMIMAT:Integer material properties. (This is used in the definition of incoming elements
+in order to specify the face in contact with the scatterer). Profiles 1 through 4 are reserved for incoming elements.      
+----------------------------------------
+------------WAVE BLOCK------------------
+----------------------------------------
+1 data line with the following wave information:
+IWAVE     Tm     Tini     fc     Amp    Phi
+IWAVE    :Wave type index (1 for SV;2 for P wave).    
+Tm       :Time span of the analysis in the case of a Ricker pulse.     
+Tini     :Initial time of the Ricker pulse.     
+fc       :Central frequency of the Ricker pulse.     
+Amp      :Amplitude of the incident wave.    
+Phi      :Incidence angle of the plane wave.
+----------------------------------------
+------------ELEMENTS BLOCK--------------
+----------------------------------------
+As many data lines as specified by NUMEL each one with the following data:
+ID_ELE  ELETYPE  NDOFE     MAT_TAG   NNODES   N1   N2   N3....N-NNODES
+ID_ELE  :Element id.
+ELETYPE :Element type.
+NDOFE   :Number of degrees of freedom at the element.
+MAT_TAG :Material profile assigned to the element.
+NNODES  :Number of nodal points for the element.
+N1   N2   N3....N-NNODES: NNODES-nodal points for the element.
+----------------------------------------
+------------LOADS BLOCK-----------------
+----------------------------------------
+As many data lines as loaded nodal points.
+ID_NODE   ID_DOF
+ID_NODE   :Id of the loaded node.
+ID_DOF    :Degree of freedom of the point load.
+----------------------------------------
+------------OUTPUT BLOCK----------------
+----------------------------------------
+As many data lines as defined by NOUTPU each one indicating
+a nodal identifier at which the output history is required.
+
